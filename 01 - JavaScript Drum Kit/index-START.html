@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
 
@@ -58,10 +60,49 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
+    function querySelectorAll(flag) {
+      return document.querySelectorAll(flag)
+    }
 
-</script>
+    function generateMaps(items) {
+      return Array.from(items).reduce((maps, item) => {
+        return { ...maps, [item.dataset.key]: item }
+      }, {})
+    }
+
+    const audios = querySelectorAll('audio')
+    const audioMap = generateMaps(audios)
+
+    const allKey = querySelectorAll('.key')
+    const keyMap = generateMaps(allKey)
+
+    console.log(audios, audioMap);
+
+    document.addEventListener('keydown', (event) => {
+      const keyCode = event.keyCode
+      const audio = audioMap[keyCode]
+      if (audio) {
+        // 如何保证按键被按住不放时，可以马上响起连续鼓点声？ 每次播放音频之前，设置播放时间戳为 0
+        audio.currentTime = 0;
+        audio.play()
+      }
+      const key = keyMap[keyCode]
+      if (key) {
+        key.classList.add('playing')
+      }
+    })
+
+    document.addEventListener('keyup', (event) => {
+      const keyCode = event.keyCode
+      const key = keyMap[keyCode]
+      if (key) {
+        key.classList.remove('playing')
+      }
+    })
+  </script>
 
 
 </body>
+
 </html>
