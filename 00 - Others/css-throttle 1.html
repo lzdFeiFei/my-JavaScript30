@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    button {
+      animation: throttle 2s step-end forwards;
+    }
+
+    button:active {
+      animation: none;
+    }
+
+    /* button.click {
+      animation: throttle 2s step-end forwards;
+    }
+
+    button.click:active {
+      animation: none;
+    } */
+
+    @keyframes throttle {
+      from {
+        pointer-events: none;
+        color: red;
+      }
+
+      to {
+        pointer-events: all;
+        color: green
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <input />
+  <button onclick="btnClick(event)">点击</button>
+  <div onclick="btnClick2()">改变btn1的animation</div>
+
+  <script>
+    function btnClick(e) {
+      e.target.classList.add('click')
+      console.log('保存123')
+    }
+
+    const btn = document.querySelector('button')
+    btn.addEventListener('webkitAnimationEnd', (e) => {
+      console.log('end');
+      e.target.classList.remove('click')
+    })
+
+    function btnClick2() {
+      const btn = document.querySelector('button')
+      console.log(btn);
+      btn.style.animation = 'none'
+      setTimeout(() => {
+        btn.style.animation = 'throttle 2s step-end forwards'
+      }, 5000)
+    }
+
+  </script>
+</body>
+
+</html>
