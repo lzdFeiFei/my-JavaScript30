@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS + CSS Clock</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
 
-    <div class="clock">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
-      </div>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
     </div>
+  </div>
 
 
   <style>
@@ -44,17 +46,18 @@
       position: relative;
       padding: 2rem;
       box-shadow:
-        0 0 0 4px rgba(0,0,0,0.1),
+        0 0 0 4px rgba(0, 0, 0, 0.1),
         inset 0 0 0 3px #EFEFEF,
         inset 0 0 10px black,
-        0 0 10px rgba(0,0,0,0.2);
+        0 0 10px rgba(0, 0, 0, 0.2);
     }
 
     .clock-face {
       position: relative;
       width: 100%;
       height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      transform: translateY(-3px);
+      /* account for the height of the clock hands */
     }
 
     .hand {
@@ -63,13 +66,73 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: right;
+      transform: rotate(90deg);
+      /* 旋转指向上 */
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
   </style>
 
   <script>
+    // 1. 获取当前时间
+    function getCurrentTime() {
+      const now = new Date()
+      return {
+        'hour': now.getHours(),
+        'minute': now.getMinutes(),
+        'second': now.getSeconds()
+      }
+    }
+
+    // 2. 计算旋转角度
+    function getRotateDegrees({ hour, minute, second }) {
+      return {
+        hourDegrees: 360 / 12 * hour + ((minute / 60) * 30) + 90,
+        minuteDegrees: 360 / 60 * minute + ((second / 60) * 6) + 90,
+        secondDegrees: 360 / 60 * second + 90,
+      }
+    }
+
+    // 设置旋转角度
+    function setDegrees(ele, degree) {
+      ele.style.transform = `rotate(${degree}deg)`
+    }
 
 
+    const hourHand = document.querySelector('.hour-hand')
+    const minHand = document.querySelector('.min-hand')
+    const secondHand = document.querySelector('.second-hand')
+
+    // 3. 添加 setInterval
+    setInterval(() => {
+      const { hourDegrees, minuteDegrees, secondDegrees } = getRotateDegrees(getCurrentTime())
+      setDegrees(hourHand, hourDegrees)
+      setDegrees(minHand, minuteDegrees)
+      setDegrees(secondHand, secondDegrees)
+    }, 1000)
+
+    // function initDate() {
+    //   const date = new Date();
+    //   const second = date.getSeconds();
+    //   secondDeg = 90 + (second / 60) * 360;
+    //   const min = date.getMinutes();
+    //   minDeg = 90 + (min / 60) * 360 + ((second / 60) / 60) * 360;
+    //   const hour = date.getHours();
+    //   hourDeg = 90 + (hour / 12) * 360 + ((min / 60) / 12) * 360 + (((second / 60) / 60) / 12) * 360;
+    // }
+
+    // function updateDate() {
+    //   secondDeg += (1 / 60) * 360;
+    //   minDeg += ((1 / 60) / 60) * 360;
+    //   hourDeg += (((1 / 60) / 60) / 12);
+
+    //   secHand.style.transform = `rotate(${secondDeg}deg)`;
+    //   minHand.style.transform = `rotate(${minDeg}deg)`;
+    //   hourHand.style.transform = `rotate(${hourDeg}deg)`;
+    // }
   </script>
 </body>
+
 </html>
