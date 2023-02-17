@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
@@ -22,10 +24,21 @@
   <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
 
   <style>
-
     /*
       misc styles, nothing to do with CSS variables
     */
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+      background-color: #193549;
+    }
+
+    img {
+      padding: var(--spacing);
+      background-color: var(--base);
+      filter: blur(var(--blur))
+    }
 
     body {
       text-align: center;
@@ -43,10 +56,33 @@
     input {
       width: 100px;
     }
+
   </style>
 
   <script>
+    // document.documentElement 获取文档根元素
+    const root = document.documentElement
+    // const color = root.style.setProperty('--base-color', 'red')
+    // console.log('color', root.style, root.style.getPropertyValue('blackground-color'))
+    // console.log('color', getComputedStyle(root).getPropertyValue('--base-color'))
+
+
+
+
+    const inputs = document.querySelectorAll('.controls input')
+
+    function updateValue() {
+      const suffix = this.dataset.sizing || ''
+      document.documentElement.style.setProperty(`--${this.name}`, `${this.value}${suffix}`)
+    }
+
+    inputs.forEach((input) => input.addEventListener('change', updateValue))
+    // inputs.forEach((input) => input.addEventListener('mousemove', updateValue))
+    // <input type='color'> 颜色选择器有 input 和 change 事件，input 随着选择的颜色变化而触发，change 在关闭颜色选择器后触发
+    inputs[2].addEventListener('input', updateValue)
+
   </script>
 
 </body>
+
 </html>
