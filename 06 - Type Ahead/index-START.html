@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Type Ahead 👀</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
   <form class="search-form">
@@ -15,9 +17,40 @@
       <li>or a state</li>
     </ul>
   </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+  <script>
+    const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
-</script>
+    const cities = []
+    fetch(endpoint).then(blob => blob.json()).then(res => cities.push(...res))
+
+    const input = document.querySelector('input')
+    const suggestions = document.querySelector('.suggestions')
+
+    function select(e) {
+      console.log('input', input.value);
+      const inputValue = input.value || ' '
+      const searchResult = cities.filter((city) => `${city.city},${city.state}`.toLowerCase().includes(inputValue.toLowerCase()))
+      const regex = new RegExp(inputValue, "gi")
+      // 清空子元素
+      suggestions.innerHTML = ""
+      searchResult.forEach((city) => {
+        const newLi = document.createElement('li')
+        const text = `${city.city},${city.state}`
+        // const matchResult = text.match(regex)
+        // console.log(matchResult);
+        // matchResult.forEach(result => {
+        //   text = text.replace(result, `<span class='hl'>${result}</span>`)
+        // })
+        newLi.innerHTML = text.replace(regex, (match) => {
+          console.log(match);
+          return `<span class='hl'>${match}</span>`
+        })
+        suggestions.appendChild(newLi)
+      })
+    }
+
+    input.addEventListener('input', select)
+  </script>
 </body>
+
 </html>
