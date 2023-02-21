@@ -27,24 +27,24 @@
     const suggestions = document.querySelector('.suggestions')
 
     function select(e) {
-      console.log('input', input.value);
       const inputValue = input.value || ' '
-      const searchResult = cities.filter((city) => `${city.city},${city.state}`.toLowerCase().includes(inputValue.toLowerCase()))
+      const searchResult = cities.filter((city) => `${city.city}, ${city.state}`.toLowerCase().includes(inputValue.toLowerCase()))
+      console.log('searchResult', searchResult);
       const regex = new RegExp(inputValue, "gi")
       // 清空子元素
       suggestions.innerHTML = ""
       searchResult.forEach((city) => {
+        const text = `${city.city}, ${city.state}`
         const newLi = document.createElement('li')
-        const text = `${city.city},${city.state}`
-        // const matchResult = text.match(regex)
-        // console.log(matchResult);
-        // matchResult.forEach(result => {
-        //   text = text.replace(result, `<span class='hl'>${result}</span>`)
-        // })
-        newLi.innerHTML = text.replace(regex, (match) => {
-          console.log(match);
+        const nameSpan = document.createElement('span')
+        nameSpan.innerHTML = text.replace(regex, (match) => {
           return `<span class='hl'>${match}</span>`
         })
+        const numberSpan = document.createElement('span')
+        numberSpan.classList.add('population')
+        numberSpan.innerHTML = city.population
+        newLi.appendChild(nameSpan)
+        newLi.appendChild(numberSpan)
         suggestions.appendChild(newLi)
       })
     }
