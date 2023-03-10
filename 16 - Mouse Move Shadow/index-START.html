@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Mouse Shadow</title>
   <link rel="icon" href="https://fav.farm/🔥" />
 </head>
+
 <body>
 
   <div class="hero">
@@ -12,30 +14,50 @@
   </div>
 
   <style>
-  html {
-    color: black;
-    font-family: sans-serif;
-  }
+    html {
+      color: black;
+      font-family: sans-serif;
+    }
 
-  body {
-    margin: 0;
-  }
+    body {
+      margin: 0;
+    }
 
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-  }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: black;
+    }
 
-  h1 {
-    text-shadow: 10px 10px 0 rgba(0,0,0,1);
-    font-size: 100px;
-  }
+    h1 {
+      text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+      font-size: 100px;
+    }
+
   </style>
 
-<script>
-</script>
+  <script>
+    const h1 = document.querySelector('h1')
+    const centerPoint = {
+      x: h1.offsetLeft + 0.5 * h1.clientWidth,
+      y: h1.offsetTop + 0.5 * h1.clientHeight
+    }
+
+    function distance(centerPoint, point2) {
+      const detX = (point2.x - centerPoint.x) * 0.5
+      const detY = (point2.y - centerPoint.y) * 0.5
+      console.log('detX, detY ', detX, detY);
+      return { detX, detY }
+      // return `color ${detX * 0.5}px ${detY * 0.5}px 0px`
+    }
+    document.addEventListener('mousemove', function (e) {
+      const { detX, detY } = distance(centerPoint, { x: e.x, y: e.y })
+      h1.style.textShadow = `rgb(255 0 255 / 70%) ${detX}px ${detY}px 0px, rgb(0 255 255 / 70%) -${detX}px -${detY}px 0px, rgb(0 255 0 / 70%) ${detY}px ${detX}px 0px, rgb(0 0 255 / 70%) -${detY}px -${detX}px 0px`
+      // h1.style.textShadow = 'rgb(255 0 255 / 70%) 177px -249px 0px, rgb(0 255 255 / 70%) -177px -249px 0px, rgb(0 255 0 / 70%) -249px -177px 0px, rgb(0 0 255 / 70%) 249px 177px 0px'
+    })
+  </script>
 </body>
+
 </html>
